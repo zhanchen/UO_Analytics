@@ -22,12 +22,18 @@ The following inputs can be set in Main.R:
 ### Main.R Functions
 #### merge_demographics = function(predy, test_data)
 Function for merging student information (student ID) with model predictions, and generalising grade predictions into "Pass" and "Fail" values
-**Inputs**
+
+**Inputs:**
+
 * predy: Dataframe containing model prediction result, as outputted by model_rt(), model_glm() and model_naiveBayes()
 * test_data: Datframe containing test data, required for student IDs
-**Output**
+
+**Output:**
+
 Dataframe of 3 columns containing student ID, grade prediction and pass or fail value
-**Example usage**
+
+**Example usage:**
+
 ```
 rt_pred = model_rt(fmla_vars, train, validate, test)
 merge_demographics(rt_pred, test)
@@ -45,11 +51,17 @@ head(rt_pred)
 
 #### majority_vote = function(list_predictions)
 Function for majority voting between multiple models, based on models' predicted "Pass" and "Fail" values
-**Input**
+
+**Input:**
+
 * list_predictions: list of dataframes containing model predictions, as outputted by merge_demographics()
-**Output**
+
+**Output:**
+
 Dataframe containing student ID, columns containing Pass/Fail result from each predictive model, number of "Pass" votes accross all inputted results, and Pass/Fail result of majority vote
-**Example usage**
+
+**Example usage:**
+
 ```
 list_preds = list(rt_pred, glm_pred, bayes_pred)
 maj_pred = majority_vote(list_preds)
@@ -69,10 +81,14 @@ head(maj_pred)
 #### p_m_log_bigrams = function(m_log, week_range = 3)
 Extracts conditional bi-gram probability features from m_log. An implementation of technique described in: Li, Xiao, Wang, Ting & Wang, Huaimin 2017, ‘Exploring N-gram Features in Clickstream Data for MOOC Learning Achievement Prediction’, in Database Systems for Advanced Applications, Springer International Publishing, Cham, pp. 328–339.
 NOTE: Very long processing time
+
 **Inputs:**
+
 * m_log: dataframe of m_log data, as processed by Data_extract.R
 * week_range: number of weeks of course data to analyse
+
 **Output:**
+
 Dataframe containing conditional bi-gram probability features for each activity to each other activity and end state, as well as from start state to each activity, for each student per course.
 ```
 head(m_log_bigrams_p)
@@ -88,14 +104,20 @@ head(m_log_bigrams_p)
 ### Model.R Functions
 #### model_rt = function(fmla_vars, train_data, val_data, test_data)
 Make student grade predictions using Regression Tree technique.
+
 **Inputs:**
+
 * fmla_vars: vector of column names of features to use in prediction
 * train_data: dataframe of training data
 * val_data: dataframe of validation data
 * test_data: dataframe of test data
-**Output**
+
+**Output:**
+
 Dataframe of 1 column containing predicted grades, ordered in same student order as test_data.
-**Example usage**
+
+**Example usage:**
+
 ```
 fmla_vars = c("avg_duration_page.viewing_per_session", "avg_num_page.viewing_per_session", "num_sessions_track",
               "no_quiz", "no_try.mean", "Student_Score.max.mean", "time.Session_No", "time.Session_Time_Mean",
@@ -108,37 +130,54 @@ model_rt = function(fmla_vars, train_data, val_data, test_data)
 
 #### model_glm = function(fmla_vars, train_data, val_data, test_data)
 Make student grade predictions using Generalised Linear Model technique
+
 **Inputs:**
+
 * fmla_vars: vector of column names of features to use in prediction
 * train_data: dataframe of training data
 * val_data: dataframe of validation data
 * test_data: dataframe of test data
-**Output**
+
+**Output:**
+
 Dataframe of 1 column containing predicted grades, ordered in same student order as test_data.
-**Example usage**
+
+**Example usage:**
+
 See model_rt above
 
 #### model_naiveBayes = function(fmla_vars, train_data, val_data, test_data)
 Make student grade predictions using Naïve Bayes technique.
+
 **Inputs:**
 * fmla_vars: vector of column names of features to use in prediction
 * train_data: dataframe of training data
 * val_data: dataframe of validation data
 * test_data: dataframe of test data
-**Output**
+
+**Output:**
+
 Dataframe of 1 column containing predicted grades, ordered in same student order as test_data.
-**Example usage**
+
+**Example usage:**
+
 See model_rt above
 
 #### accuracy = function(validate_data, pred, pred_col_name)
 Compares model prediction results with validation data and outputs confusion matrix and accuracy values
+
 **Inputs:**
+
 * validate_data: dataframe of validation data
 * pred: dataframe of prediction model results, which was passed through merge_demographics() to produce column with "Pass" and "Fail" values
 * pred_col_name: column name which contains "Pass" and "Fail values"
-**Output**
+
+**Output:**
+
 Dataframe of 5 columns containing confusion matrix values and accuracy of inputted model results.
-**Example usage**
+
+**Example usage:**
+
 ```
 head(rt_pred)
 
